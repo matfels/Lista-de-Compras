@@ -1,6 +1,7 @@
 // Importando os componentes View e Text do react-native
-import {View, Text, Image} from "react-native"
+import {View, Text, Image } from "react-native"
 import {styles} from "./styles"
+import { Button } from "@/components/Button/index"
 
 
 
@@ -18,6 +19,10 @@ export function Home(){
 
     <View style={styles.container}>
         <Image source={require("@/assets/logo.png")} style={styles.logo}/>
+        <Button title="Entrar" onPress={() => console.log("Entrar")}/>
+
+
+        
         
 
     </View>
