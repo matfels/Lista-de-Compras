@@ -2,6 +2,8 @@
 import {View, Text, Image } from "react-native"
 import {styles} from "./styles"
 import { Button } from "@/components/Button/index"
+import { Input } from "@/components/Input/index"
+
 
 
 
@@ -18,11 +20,14 @@ export function Home(){
   return(
 
     <View style={styles.container}>
-        <Image source={require("@/assets/logo.png")} style={styles.logo}/>
+      <Image source={require("@/assets/logo.png")} style={styles.logo}/>
+      <View style={styles.form}>
+        <Input placeholder="O que você precisa comprar?" />
         <Button title="Entrar" onPress={() => console.log("Entrar")}/>
+      </View>
+      <View style={styles.content}>
 
-
-        
+      </View>
         
 
     </View>
