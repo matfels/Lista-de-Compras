@@ -1,10 +1,11 @@
 // Importando os componentes View e Text do react-native
-import { View, Image, TouchableOpacity, Text } from "react-native"
+import { View, Image, TouchableOpacity, Text, ScrollView } from "react-native"
 import { styles } from "./styles"
 import { Button } from "@/components/Button/index"
 import { Input } from "@/components/Input/index"
 import { Filter } from "@/components/Filter/index"
 import { FilterStatus } from "@/types/FilterStatus"
+import { Item } from "@/components/Item"
 
 
 const FILTER_STATUS: FilterStatus[] = [FilterStatus.PENDING, FilterStatus.DONE]
@@ -39,6 +40,19 @@ export function Home() {
             <Text style={styles.clearText}>Limpar</Text>
           </TouchableOpacity>
         </View>
+        <ScrollView>
+
+        {Array.from({ length: 100 }).map((value, index) => (
+          
+          <Item
+          key={index}
+          data={{ status: FilterStatus.DONE, description: "café" }}
+          onStatus={() => console.log("Muda o status")}
+          onRemove={() => console.log("remover")}
+          />
+        ))}
+        </ScrollView>
+
       </View>
     </View>
 
