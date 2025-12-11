@@ -36,23 +36,66 @@ export function Home() {
 
     }
     await itemsStorage.add(newItem)
-    await getItems()
-    //    console.log(items)
-    //    setItems((prevState) =>[...items, newItem])
+    await itemsByStatus()
+
+    Alert.alert("Adicionado", `Adicionado ${description}`)
+    setDescription("") //Apagamos o texto da caixa de texto.
+    setFilter(FilterStatus.PENDING)
   }
 
-  async function getItems() {
+  async function itemsByStatus() {
     try {
-      const response = await itemsStorage.get()
+      const response = await itemsStorage.getByStatus(filter)
       setItems(response)
     } catch (error) {
       console.log(error)
       Alert.alert("Erro", "Não foi possível filtar os itens.")
     }
   }
+
+  async function handleRemove(id: String) {
+    try {
+      await itemsStorage.remove(id)
+      await itemsByStatus()
+
+    } catch (error) {
+      console.log(error)
+      Alert.alert("Remover", "Não foi possível remover.")
+    }
+  }
+
+  function handleClear() {
+    Alert.alert("Limpar", "Deseja remover todos os items?",[
+      { text: "Não", style: "cancel"},
+      { text: "Sim", onPress:() => onClear()},
+    ])
+  }
+
+  async function onClear(){
+    try{
+      await itemsStorage.clear()
+      setItems([])
+    } catch(error){
+      console.log(error)
+      Alert.alert("Limpar", "Erro ao limpar a lista.")
+    }
+  }
+
+  async function handleToggleItemStatus(id: string){
+    try{
+      await itemsStorage.toggleStatus(id)
+      await itemsByStatus()
+    } catch(error){
+      console.log(error)
+      Alert.alert("Erro", "Não foi possível atualizar o status.")
+    }
+  }
+
+
+
   useEffect(() => {
-    getItems()
-  }, [])
+    itemsByStatus()
+  }, [filter])
   // Chamar os dados do BD
   //useEffect(() => {
   // modo não convencional de recuperar dados. não conseguimos utilziar o asinc e await.
@@ -68,6 +111,7 @@ export function Home() {
         <Input
           placeholder="O que você precisa comprar?"
           onChangeText={setDescription}
+          value={description} // estamos utilizando para apagar o texto da caixa de texto apos inserir os dados
         />
         <Button title="Adicionar" onPress={handleAdd} />
       </View>
@@ -81,7 +125,7 @@ export function Home() {
               onPress={() => setFilter(status)}
             />
           ))}
-          <TouchableOpacity style={styles.clearButton}>
+          <TouchableOpacity style={styles.clearButton} onPress={handleClear}>
             <Text style={styles.clearText}>Limpar</Text>
           </TouchableOpacity>
         </View>
@@ -91,8 +135,8 @@ export function Home() {
           renderItem={({ item }) => (
             <Item
               data={item}
-              onStatus={() => console.log("Muda o status")}
-              onRemove={() => console.log("remover")}
+              onStatus={() => handleToggleItemStatus(item.id)  }
+              onRemove={() => handleRemove(item.id)}
             />
           )}
           showsVerticalScrollIndicator={false}
