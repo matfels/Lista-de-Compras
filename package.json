@@ -1,6 +1,7 @@
 {
   "name": "comprar",
   "version": "1.0.0",
+  "homepage": "https://matfels.github.io/Lista-de-Compras",
   "main": "index.ts",
   "scripts": {
     "start": "expo start",
